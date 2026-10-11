@@ -13,6 +13,9 @@ public class Main {
 
                 Socket socket = null;
                 
+
+
+                
                 try {
                     socket = serverSocket.accept();
                     System.out.println("Client connecté");
@@ -28,13 +31,28 @@ public class Main {
 
                     System.out.println(request.headers);
 
-
-                    HttpResponse.send(socket, 200, "{\"message\": \"hello\"}");
+                    HttpResponse.send(socket, 200, request.body);
+                } catch (BadRequestException e) {
+                    try {
+                        HttpResponse.send(socket, 400, "{\"error\": \"Requête invalide\"}");
+                    } catch (Exception f) {
+                        System.out.println("Client injoignable");
+                    }
+                    System.out.println(e.getMessage());
                 } catch (Exception e) {
+                    if (socket != null) {
+                        try {
+                            HttpResponse.send(socket, 500, "{\"error\": \"Erreur du serveur\"}");
+                        } catch (Exception f) {
+                            System.out.println("Client injoignable");
+                        }
+                    }
                     e.printStackTrace();
                 } finally {
                     if (socket != null) 
                         {try {
+
+                            
                             socket.close();
                         } catch (Exception e) {
                             e.printStackTrace();
