@@ -14,6 +14,8 @@ public class HttpRequest {
   
   public HttpRequest(BufferedReader reader) throws Exception {
     
+
+
     headerReader (reader);
 
     bodyReader (reader);
