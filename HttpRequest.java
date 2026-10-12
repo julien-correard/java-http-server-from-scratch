@@ -8,11 +8,22 @@ public class HttpRequest {
   public String path;
   public String version;
   public Map<String, String> headers = new HashMap<>();
+  public int contentLength;
   public String body;
   private static final int MAX_BODY = 1_000_000;
   
   public HttpRequest(BufferedReader reader) throws Exception {
     
+    headerReader (reader);
+
+    bodyReader (reader);
+      
+    }
+    
+  
+
+  private void headerReader (BufferedReader reader) throws Exception {
+  
     String requestLine = reader.readLine();
 
     if (requestLine == null) throw new BadRequestException("Requête vide");
@@ -40,7 +51,7 @@ public class HttpRequest {
     String contentLengthStr = headers.get("content-length");
     if (contentLengthStr == null) body = "";
     else {
-      int contentLength = 0;
+      contentLength = 0;
       try {
         contentLength = Integer.parseInt(contentLengthStr);
         if (contentLength < 0) throw new BadRequestException("Content length négatif");
@@ -48,8 +59,11 @@ public class HttpRequest {
       } catch (NumberFormatException e){ 
         throw new BadRequestException("En tête invalide");
       }
-      
-      int bytesRead = 0;
+    }
+  }
+
+  private void bodyReader (BufferedReader reader) throws Exception {
+  int bytesRead = 0;
       StringBuilder sb = new StringBuilder();
 
       while (bytesRead < contentLength) {
@@ -62,7 +76,5 @@ public class HttpRequest {
 
       body = sb.toString();
 
-    }
-    
   }
 }
