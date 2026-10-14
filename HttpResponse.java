@@ -16,6 +16,8 @@ public class HttpResponse {
         break;
       case 201 : status = "Created";
         break;
+      case 204 : status = "No Content";
+        break;
       case 400 : status = "Bad Request";
         break;
       case 404 : status = "Not Found";

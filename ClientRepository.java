@@ -33,4 +33,11 @@ public class ClientRepository {
         return newClient;
 
     }
+
+    public Client deleteById(int id){
+
+        Client deleted = clients.remove(id);
+
+        return deleted;
+    }
 }

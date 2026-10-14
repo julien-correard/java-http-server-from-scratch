@@ -55,9 +55,7 @@ public class Main {
                         statusCode = 201;
 
                         responseBody = clientToJson(created);
-                    }
-
-                    else if ("GET".equals(request.method)) {
+                    } else if ("GET".equals(request.method)) {
                         if (CLIENTS_PATH.equals(request.path)) {
                             List<Client> clients = clientRepository.findAll();
 
@@ -98,13 +96,36 @@ public class Main {
                             statusCode = 404;
                             responseBody = "{\"error\":\"Ressource introuvable\"}";
                         }
-                    } else {
-                        statusCode = 400;
-                        responseBody = "{\"error\":\"méthode non reconnue\"}";
+
+                    } else if ("DELETE".equals(request.method)) {
+                        if (request.path.startsWith(CLIENTS_PATH + "/")) {
+                            String numberStr = request.path.substring(CLIENTS_PATH.length() + 1);
+                            try {
+                                int clientNumber = Integer.parseInt(numberStr);
+
+                                Client deleted = clientRepository.deleteById(clientNumber);
+
+                                if (deleted == null) {
+                                    statusCode = 404;
+                                    responseBody = "{\"error\":\"Le client n'existe pas\"}";
+                                } else {
+                                    statusCode = 204;
+                                    responseBody = "";
+                                }
+
+                            } catch (NumberFormatException e) {
+                                statusCode = 404;
+                                responseBody = "{\"error\":\"Ressource introuvable\"}";
+                            }
+
+                        } else {
+                            statusCode = 400;
+                            responseBody = "{\"error\":\"méthode non reconnue\"}";
+                        }
+
                     }
 
                     HttpResponse.send(socket, statusCode, responseBody);
-
                 } catch (BadRequestException e) {
                     try {
                         HttpResponse.send(socket, 400, "{\"error\": \"Requête invalide\"}");
@@ -155,4 +176,5 @@ public class Main {
         return json;
 
     }
+
 }
