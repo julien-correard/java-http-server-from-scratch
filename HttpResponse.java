@@ -14,11 +14,13 @@ public class HttpResponse {
     switch (statusCode) {
       case 200 : status = "OK";
         break;
+      case 201 : status = "Created";
+        break;
       case 400 : status = "Bad Request";
         break;
       case 404 : status = "Not Found";
         break;
-      case 408 : status ="Request Timeout";
+      case 408 : status = "Request Timeout";
         break;
       case 500 : status = "Internal Server Error";
         break;

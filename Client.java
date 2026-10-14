@@ -34,5 +34,6 @@ public class Client {
    return "Id : " + this.id +
 	  " , Nom :  " + this.name +
 	  ", Téléphone : " + this.phone;
-}
+    }
+
 }

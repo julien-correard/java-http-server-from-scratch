@@ -1,5 +1,7 @@
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ClientRepository {
 
@@ -11,6 +13,13 @@ public class ClientRepository {
         Client client = clients.get(id);
 
         return client;
+    }
+
+    public List<Client> findAll(){
+
+        List<Client> allClients = new ArrayList<>(clients.values());
+
+        return allClients;
     }
 
     public Client createNewClient(String name, String phone){
