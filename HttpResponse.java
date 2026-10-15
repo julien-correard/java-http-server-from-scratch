@@ -20,6 +20,8 @@ public class HttpResponse {
         break;
       case 400 : status = "Bad Request";
         break;
+      case 405 : status = "Method Not Allowed";
+        break;
       case 404 : status = "Not Found";
         break;
       case 408 : status = "Request Timeout";
