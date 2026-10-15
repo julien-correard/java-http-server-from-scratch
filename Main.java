@@ -114,15 +114,46 @@ public class Main {
                                 }
 
                             } catch (NumberFormatException e) {
-                                statusCode = 404;
-                                responseBody = "{\"error\":\"Ressource introuvable\"}";
+                                statusCode = 400;
+                                responseBody = "{\"error\":\"Numéro de client erroné\"}";
                             }
-
                         } else {
                             statusCode = 400;
-                            responseBody = "{\"error\":\"méthode non reconnue\"}";
+                            responseBody = "{\"error\":\"Client non spécifié\"}";
                         }
+                    }else if ("PATCH".equals(request.method)){
+                        if (request.path.startsWith(CLIENTS_PATH + "/")) {
+                            String numberStr = request.path.substring(CLIENTS_PATH.length() + 1);
+                            try {
+                                JsonParser parser = new JsonParser(request.body);
 
+                                Map<String, String> clientToUpdate = parser.parseObject();
+
+                                String name = clientToUpdate.get("name");
+                                String phone = clientToUpdate.get("phone");
+                                int clientNumber = Integer.parseInt(numberStr);
+
+                                Client updated = clientRepository.updateClient(clientNumber, name, phone);
+                                
+                                if (updated == null) {
+                                    statusCode = 404;
+                                    responseBody = "{\"error\":\"Le client n'existe pas\"}";
+                                } else {
+                                    statusCode = 200;
+                                    responseBody = clientToJson(updated);
+                                }
+
+                            } catch (NumberFormatException e) {
+                                statusCode = 400;
+                                responseBody = "{\"error\":\"Numéro de client erroné\"}";
+                            }
+                        } else {
+                            statusCode = 400;
+                            responseBody = "{\"error\":\"Client non spécifié\"}";
+                        }
+                    } else {
+                        statusCode = 400;
+                        responseBody = "{\"error\":\"méthode non reconnue\"}";
                     }
 
                     HttpResponse.send(socket, statusCode, responseBody);

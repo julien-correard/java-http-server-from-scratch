@@ -40,4 +40,16 @@ public class ClientRepository {
 
         return deleted;
     }
+
+    public Client updateClient(int id,String name,String phone){
+    
+        Client clientToUpdate = clients.get(id);
+
+        if (clientToUpdate == null) return null;
+
+        if (name != null) clientToUpdate.setName(name);
+        if (phone != null) clientToUpdate.setPhone(phone);
+
+        return clientToUpdate;
+    }
 }
