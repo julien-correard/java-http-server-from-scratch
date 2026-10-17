@@ -1,7 +1,7 @@
 public class TestClientRepo {
     public static void main(String[] args){
 
-        ClientRepository clientRepository = new ClientRepository();
+        InMemoryClientRepository clientRepository = new InMemoryClientRepository();
 
         Client client1 = clientRepository.createNewClient("Dupont", "0675654512");
         Client client2 = clientRepository.createNewClient("Michel", "0465542312");

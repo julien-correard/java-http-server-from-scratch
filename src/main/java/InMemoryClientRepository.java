@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ClientRepository {
+public class InMemoryClientRepository implements ClientRepository {
 
     private Map <Integer, Client> clients = new HashMap<>();
     private int clientIndex = 1;

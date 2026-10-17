@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        ClientRepository clientRepository = new ClientRepository();
+        JdbcClientRepository clientRepository = new JdbcClientRepository("jdbc:postgresql://localhost:5433/clients_db", "postgres", "secret");
 
         try (ServerSocket serverSocket = new ServerSocket(8080)) {
             System.out.println("Serveur démarré sur le port 8080...");
