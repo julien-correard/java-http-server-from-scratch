@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        JdbcClientRepository clientRepository = new JdbcClientRepository("jdbc:postgresql://localhost:5433/clients_db", "postgres", "secret");
+        ClientRepository clientRepository = createRepository();
 
         try (ServerSocket serverSocket = new ServerSocket(8080)) {
             System.out.println("Serveur démarré sur le port 8080...");
@@ -202,5 +202,24 @@ public class Main {
         return s.replace("\\", "\\\\").replace("\"", "\\\"")
                 .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
     }
+
+    private static ClientRepository createRepository() {
+    String dbUrl = System.getenv("DB_URL");
+
+    if (dbUrl == null) {
+        System.out.println("DB_URL absente : stockage en mémoire");
+        return new InMemoryClientRepository();
+    }
+
+    String user = System.getenv("DB_USER");
+    String password = System.getenv("DB_PASSWORD");
+
+    if (user == null || password == null) {
+        throw new IllegalStateException("DB_USER et DB_PASSWORD sont obligatoires avec DB_URL");
+    }
+
+    System.out.println("Stockage PostgreSQL");
+    return new JdbcClientRepository(dbUrl, user, password);
+}
 
 }
